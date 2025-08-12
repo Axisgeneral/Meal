@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Planner</title>
+    <link rel="stylesheet" href="main.css">
+  </head>
+  <body class="light-theme">
+    <div id="app-content">
+      <div id="calendar-nav" style="display:flex;align-items:center;justify-content:center;margin-bottom:1em;gap:1em;">
+        <button id="prev-week-btn" type="button" style="background:#1565c0;color:#fff;font-weight:bold;">&lt;</button>
+        <span id="week-label" style="font-size:1.1em;font-weight:bold;"></span>
+        <button id="next-week-btn" type="button" style="background:#1565c0;color:#fff;font-weight:bold;">&gt;</button>
+        <button id="current-week-btn" type="button" style="background:#1976d2;color:#fff;font-weight:bold;">Current Week</button>
+      </div>
+  <h1>Tom's Meal Planner</h1>
+      <form id="add-meal-form">
+        <label for="day-select">Day:</label>
+        <select id="day-select" required></select>
+        <label for="meal-type-select">Type:</label>
+        <select id="meal-type-select" required>
+          <option value="Breakfast">Breakfast</option>
+          <option value="Lunch">Lunch</option>
+          <option value="Dinner">Dinner</option>
+        </select>
+        <label for="meal-input">Meal:</label>
+        <input id="meal-input" type="text" required placeholder="e.g. Chicken Salad">
+        <button type="submit">Add Meal</button>
+      </form>
+      <div style="margin: 1em 0;">
+        <label for="theme-select">Theme:</label>
+        <select id="theme-select">
+          <option value="light-theme">Light</option>
+          <option value="dark-theme">Dark</option>
+          <option value="medium-theme">Medium</option>
+          <option value="blue-theme">Blue</option>
+          <option value="green-theme">Green</option>
+          <option value="orange-theme">Orange</option>
+          <option value="pink-theme">Pink</option>
+        </select>
+  <button id="erase-all-btn" type="button" style="margin-left:2em;background:#e53935;color:#fff;font-weight:bold;">Erase Current Week</button>
+  <button id="export-pdf-btn" type="button" style="margin-left:1em;background:#1976d2;color:#fff;font-weight:bold;font-size:1em;padding:0.4em 1.2em;border:1px solid #1565c0;box-shadow:none;">Print / Export to PDF</button>
+      </div>
+      <div style="margin-bottom:1em;display:flex;justify-content:center;align-items:center;gap:1em;">
+        <label for="view-mode-select">View:</label>
+        <select id="view-mode-select">
+          <option value="weekly">Weekly</option>
+          <option value="daily">Daily</option>
+        </select>
+        <select id="daily-day-select" style="display:none;"></select>
+      </div>
+      <div id="meal-list"></div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

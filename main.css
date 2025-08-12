@@ -1,0 +1,265 @@
+@media print {
+	h1, #add-meal-form, #theme-select, label[for="theme-select"], #view-mode-select, #daily-day-select, label[for="view-mode-select"], label[for="day-select"], label[for="meal-type-select"], label[for="meal-input"] {
+		display: none !important;
+	}
+		html, body {
+			font-size: 10px !important;
+			line-height: 1.05 !important;
+		}
+		h1 {
+			font-size: 1em !important;
+			margin: 0.1em 0 0.2em 0 !important;
+		}
+		h3 {
+			font-size: 0.9em !important;
+			margin: 0.05em 0 0.1em 0 !important;
+		}
+		h4 {
+			font-size: 0.85em !important;
+			margin: 0.05em 0 0.05em 0 !important;
+		}
+		label {
+			font-size: 0.85em !important;
+			margin: 0 0.1em 0 0 !important;
+		}
+		.day-block {
+			margin-bottom: 0.1em !important;
+			padding: 0.1em 0.15em !important;
+			border-left-width: 1px !important;
+		}
+		ul {
+			margin: 0.05em 0 0.1em 1em !important;
+			padding: 0 !important;
+		}
+		li {
+			margin: 0.02em 0 !important;
+			padding: 0 !important;
+			font-size: 0.85em !important;
+		}
+		.meal-ww-input, input[type="text"] {
+			font-size: 0.85em !important;
+			padding: 0.05em 0.1em !important;
+			width: 30px !important;
+			margin: 0 0.1em 0 0 !important;
+		}
+		.editable-meal {
+			font-size: 0.85em !important;
+			min-width: 1em !important;
+			padding: 0 0.5px !important;
+		}
+		@page {
+			size: A4 portrait;
+			margin: 0.2cm;
+		}
+	body {
+		background: #fff !important;
+		color: #000 !important;
+	}
+	#app-content {
+		max-width: 100vw;
+		margin: 0;
+		padding: 0;
+	}
+	#calendar-nav, #theme-select, #erase-all-btn, #erase-current-week-btn, #export-pdf-btn, #view-mode-select, #daily-day-select, #add-meal-form button, #add-meal-form select, #add-meal-form input[type="text"]:not([readonly]) {
+		display: none !important;
+	}
+	.day-block {
+		page-break-inside: avoid;
+		background: #fff !important;
+		color: #000 !important;
+		box-shadow: none !important;
+		border-left: 4px solid #1976d2 !important;
+		margin-bottom: 0.7em;
+		padding: 0.5em 0.7em;
+	}
+	h1, h3, h4, label {
+		color: #000 !important;
+		text-shadow: none !important;
+	}
+	ul, li {
+		color: #000 !important;
+		background: none !important;
+		box-shadow: none !important;
+	}
+	.meal-ww-input, input[type="text"] {
+		color: #000 !important;
+		background: #fff !important;
+		border: 1px solid #bbb !important;
+	}
+	.editable-meal {
+		color: #000 !important;
+		background: none !important;
+		border-bottom: 1px dashed #bbb !important;
+	}
+	@page {
+		size: A4 portrait;
+		margin: 0.5cm;
+	}
+}
+	background: rgba(20, 30, 50, 0.95) !important;
+	color: #e3f2fd !important;
+}
+	background: #232b3b !important;
+	color: #e3f2fd !important;
+	border-bottom: 1px dashed #90caf9 !important;
+}
+	color: #90caf9 !important;
+}
+	color: #90caf9 !important;
+	text-shadow: 1px 2px 8px #06142e, 0 1px 0 #232b3b;
+}
+/* Additional colorful themes */
+.blue-theme {
+	--bg: linear-gradient(135deg, #2196f3 0%, #0d47a1 100%);
+	--fontColor: #fff;
+}
+.green-theme {
+	--bg: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+	--fontColor: #1b3c1b;
+}
+.orange-theme {
+	--bg: linear-gradient(135deg, #ffb347 0%, #ff8008 100%);
+	--fontColor: #4e260e;
+}
+.pink-theme {
+	--bg: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+	--fontColor: #ad1457;
+}
+.meal-ww-input {
+	border: 1px solid #90caf9;
+	border-radius: 4px;
+	padding: 0.2em 0.4em;
+	font-size: 0.95em;
+	background: #e3f2fd;
+	color: #1565c0;
+	margin-left: 1em;
+	width: 60px;
+	box-sizing: border-box;
+}
+.add-meal-placeholder {
+	color: #1976d2;
+	background: #e3f2fd;
+	border-bottom: 1px dashed #90caf9;
+	font-style: italic;
+	opacity: 0.7;
+	transition: background 0.2s, color 0.2s;
+}
+.add-meal-placeholder:focus {
+	background: #bbdefb;
+	color: #1565c0;
+	opacity: 1;
+}
+.editable-meal[contenteditable="true"] {
+	border-bottom: 1px dashed #ff9800;
+	padding: 0 2px;
+	min-width: 2em;
+	outline: none;
+	cursor: text;
+	background: linear-gradient(90deg, #fffde7 0%, #e3f2fd 100%);
+	transition: background 0.2s;
+	color: #1976d2;
+}
+.editable-meal[contenteditable="true"]:focus {
+	background: #ffe082;
+}
+body {
+	background: var(--bg, linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%));
+	color: var(--fontColor, #222);
+	font-family: Arial, helvetica, sans-serif;
+	min-height: 100vh;
+	transition: background 0.3s, color 0.3s;
+}
+
+.light-theme {
+				--bg: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+	--fontColor: #222;
+}
+.dark-theme {
+	--bg: linear-gradient(135deg, #0d2346 0%, #06142e 100%);
+	--fontColor: #e3f2fd;
+}
+
+.medium-theme {
+				--bg: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+	--fontColor: #1565c0;
+}
+
+h1 {
+	color: #1976d2 !important;
+	text-shadow: 1px 2px 8px #bbdefb, 0 1px 0 #fff;
+	text-align: center;
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+	letter-spacing: 2px;
+}
+
+label {
+	color: #e65100;
+	font-weight: bold;
+}
+
+.day-block {
+	margin-bottom: 1.5em;
+	padding: 1em;
+	border-radius: 8px;
+	background: rgba(255,255,255,0.85);
+	box-shadow: 0 2px 8px rgba(33,150,243,0.08);
+	border-left: 6px solid #ff9800;
+}
+
+#add-meal-form {
+	display: flex;
+	gap: 0.5em;
+	flex-wrap: wrap;
+	margin-bottom: 1em;
+}
+
+ #add-meal-form input, #add-meal-form select, #add-meal-form button, #theme-select {
+	padding: 0.4em 0.7em;
+	border-radius: 4px;
+	border: 1px solid #90caf9;
+	font-size: 1em;
+	background: #e3f2fd;
+}
+
+
+#add-meal-form input:focus, #add-meal-form select:focus {
+	outline: 2px solid #42a5f5;
+}
+
+#add-meal-form button {
+	background: linear-gradient(90deg, #42a5f5 0%, #1565c0 100%);
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	transition: background 0.2s;
+	font-weight: bold;
+}
+#add-meal-form button:hover {
+	background: linear-gradient(90deg, #1565c0 0%, #42a5f5 100%);
+}
+
+button {
+	margin-left: 0.5em;
+	padding: 0.2em 0.7em;
+	border-radius: 4px;
+	border: none;
+	background: #90caf9;
+	color: #1565c0;
+	cursor: pointer;
+	transition: background 0.2s, color 0.2s;
+	font-weight: bold;
+}
+button:hover {
+	background: #42a5f5;
+	color: #fff;
+}
+
+#theme-select {
+	background: #e3f2fd;
+	color: #1565c0;
+	border: 1px solid #90caf9;
+	font-weight: bold;
+}
+
+/* End of file: removed invalid/leftover lines */
