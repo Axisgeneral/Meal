@@ -9,6 +9,12 @@
 // Features: meal list per day, add/edit/remove meals, theme switching, localStorage persistence
 
 document.addEventListener('DOMContentLoaded', () => {
+  const groceryWeekLabel = document.getElementById('grocery-week-label');
+  // Manual grocery items
+  let manualGroceryItems = JSON.parse(localStorage.getItem('manualGroceryItems')) || {};
+  const addIngredientForm = document.getElementById('add-ingredient-form');
+  const ingredientInput = document.getElementById('ingredient-input');
+  const groceryListEl = document.getElementById('grocery-list');
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   let viewMode = 'weekly';
   let selectedDay = days[0];
@@ -84,6 +90,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Render meals and WW fields with Breakfast, Lunch, Dinner for current week
   function renderMeals() {
+    // Set weekly date range for grocery list
+    if (groceryWeekLabel) {
+      const monday = getMonday(currentWeek);
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+      groceryWeekLabel.textContent = `${monday.toLocaleDateString()} - ${sunday.toLocaleDateString()}`;
+    }
+    // Generate grocery list for the week
+    if (groceryListEl) {
+      const week = weekKey(currentWeek);
+      groceryListEl.innerHTML = '';
+      const items = manualGroceryItems[week] || [];
+      if (items.length === 0) {
+        groceryListEl.innerHTML = '<li style="color:#888;">No items yet. Add ingredients to generate your grocery list.</li>';
+      } else {
+        items.forEach(item => {
+          const li = document.createElement('li');
+          li.style.display = 'flex';
+          li.style.alignItems = 'center';
+          li.style.justifyContent = 'space-between';
+          const span = document.createElement('span');
+          span.textContent = item;
+          li.appendChild(span);
+          const delBtn = document.createElement('button');
+          delBtn.textContent = 'Delete';
+          delBtn.style.background = '#e53935';
+          delBtn.style.color = '#fff';
+          delBtn.style.fontWeight = 'bold';
+          delBtn.style.marginLeft = '1em';
+          delBtn.style.fontSize = '0.9em';
+          delBtn.onclick = () => {
+            manualGroceryItems[week] = manualGroceryItems[week].filter(i => i !== item);
+            localStorage.setItem('manualGroceryItems', JSON.stringify(manualGroceryItems));
+            renderMeals();
+          };
+          li.appendChild(delBtn);
+          groceryListEl.appendChild(li);
+        });
+      }
+    }
+  // Add ingredient form logic
+  if (addIngredientForm && ingredientInput) {
+    addIngredientForm.onsubmit = (e) => {
+      e.preventDefault();
+      const week = weekKey(currentWeek);
+      const item = ingredientInput.value.trim();
+      if (!item) return;
+      if (!manualGroceryItems[week]) manualGroceryItems[week] = [];
+      manualGroceryItems[week].push(item);
+      localStorage.setItem('manualGroceryItems', JSON.stringify(manualGroceryItems));
+      ingredientInput.value = '';
+      renderMeals();
+    };
+  }
     mealList.innerHTML = '';
     updateWeekLabel();
     const mealTypes = ['Breakfast', 'Lunch', 'Dinner'];

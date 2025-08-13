@@ -1,11 +1,67 @@
+/* Mobile optimization */
+@media (max-width: 600px) {
+	body {
+		font-size: 1em;
+		padding: 0.5em;
+	}
+	#app-content {
+		padding: 0.5em;
+		max-width: 100vw;
+	}
+	h1, h2 {
+		font-size: 1.3em;
+		margin-top: 0.7em;
+		margin-bottom: 0.5em;
+	}
+	.day-block {
+		padding: 0.7em;
+		margin-bottom: 1em;
+		font-size: 1em;
+	}
+	#calendar-nav, #theme-select, #view-mode-select, #daily-day-select {
+		flex-direction: column !important;
+		gap: 0.5em !important;
+		font-size: 1em;
+	}
+	button, #add-meal-form button, #export-pdf-btn, #erase-all-btn, #current-week-btn {
+		font-size: 1em !important;
+		padding: 0.7em 1.2em !important;
+		min-width: 120px;
+		margin: 0.3em 0 !important;
+	}
+	input, select {
+		font-size: 1em !important;
+		padding: 0.5em !important;
+		min-width: 120px;
+		margin-bottom: 0.5em;
+	}
+	ul {
+		padding-left: 1em;
+	}
+	.meal-ww-input {
+		width: 80px !important;
+		font-size: 1em !important;
+	}
+}
+/* Hide Add Meal form and its fields */
+#add-meal-form {
+	display: none !important;
+}
 @media print {
-	h1, #add-meal-form, #theme-select, label[for="theme-select"], #view-mode-select, #daily-day-select, label[for="view-mode-select"], label[for="day-select"], label[for="meal-type-select"], label[for="meal-input"] {
+	#add-ingredient-form,
+	#grocery-list-section button {
 		display: none !important;
 	}
-		html, body {
-			font-size: 10px !important;
-			line-height: 1.05 !important;
-		}
+			#app-content > *:not(#grocery-list-section) {
+				display: none !important;
+			}
+			#grocery-list-section {
+				display: block !important;
+			}
+				html, body {
+					font-size: 20px !important;
+					line-height: 1.3 !important;
+				}
 		h1 {
 			font-size: 1em !important;
 			margin: 0.1em 0 0.2em 0 !important;
