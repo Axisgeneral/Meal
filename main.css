@@ -23,12 +23,12 @@
 		gap: 0.5em !important;
 		font-size: 1em;
 	}
-	button, #add-meal-form button, #export-pdf-btn, #erase-all-btn, #current-week-btn {
-		font-size: 1em !important;
-		padding: 0.7em 1.2em !important;
-		min-width: 120px;
-		margin: 0.3em 0 !important;
-	}
+		button, #add-meal-form button, #export-pdf-btn, #erase-all-btn, #current-week-btn, #prev-week-btn, #next-week-btn {
+			font-size: 0.95em !important;
+			padding: 0.3em 0.7em !important;
+			min-width: 80px;
+			margin: 0.2em 0.1em !important;
+		}
 	input, select {
 		font-size: 1em !important;
 		padding: 0.5em !important;
