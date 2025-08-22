@@ -155,14 +155,12 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-// --- Firebase Auth ---
 const loginBtn = document.getElementById('loginBtn');
 firebase.auth().onAuthStateChanged(user => {
     if (user) {
         loginBtn.textContent = `Logged in as ${user.email}`;
         loginBtn.disabled = true;
-        // Load user data for the current week
-        loadMealData(user.uid, getCurrentWeekKey());
+        // Optionally load user data here
     } else {
         loginBtn.textContent = 'Login with Google';
         loginBtn.disabled = false;
@@ -170,7 +168,8 @@ firebase.auth().onAuthStateChanged(user => {
 });
 loginBtn.addEventListener('click', () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider);
+    firebase.auth().signInWithPopup(provider)
+        .catch(error => alert("Login failed: " + error.message));
 });
 
 // --- Helper to get current week key ---
