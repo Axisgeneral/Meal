@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Code</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+    <div id="auth-section" style="max-width:400px;margin:24px auto 0 auto;padding:18px 24px;background:#eaf2ff;border-radius:8px;box-shadow:0 1px 4px rgba(79,140,255,0.08);">
+        <h2 style="color:#357ae8;">Sign In</h2>
+        <form id="auth-form" style="display:flex;flex-direction:column;gap:10px;">
+            <input type="email" id="auth-email" placeholder="Email" required style="padding:8px;border-radius:6px;border:1px solid #4f8cff;">
+            <input type="password" id="auth-password" placeholder="Password" required style="padding:8px;border-radius:6px;border:1px solid #4f8cff;">
+            <button type="button" id="login-btn" style="background:#357ae8;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:1em;cursor:pointer;">Sign In</button>
+            <button type="button" id="register-btn" style="background:#4f8cff;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:1em;cursor:pointer;">Register</button>
+            <div id="auth-error" style="color:#e83a3a;font-size:0.95em;"></div>
+        </form>
+    </div>
+    <h1>Test Code</h1>
+    <button type="button" id="toggle-planner" style="margin-bottom:18px; background:#357ae8; color:#fff; border:none; border-radius:6px; padding:8px 18px; font-size:1em; cursor:pointer;">Hide Planner</button>
+    <form id="meal-form">
+            <div class="weekly-target-row" style="margin-bottom:20px;">
+                <button type="button" id="prev-week" style="background:#357ae8; color:#fff; border:none; border-radius:6px; padding:6px 14px; font-size:1em; cursor:pointer;">&#8592; Prev</button>
+                <label for="weekly-target" style="font-size:1.1em; color:#357ae8; font-weight:600;">Weekly Target WW Points:</label>
+                <input type="number" id="weekly-target" name="weekly-target" placeholder="Enter weekly target" min="0" style="width:140px; margin-left:10px;">
+                <button type="button" id="next-week" style="background:#357ae8; color:#fff; border:none; border-radius:6px; padding:6px 14px; font-size:1em; cursor:pointer;">Next &#8594;</button>
+            </div>
+            <div id="points-tracker" style="margin-bottom:24px;">
+                <div style="font-size:1em; color:#357ae8; font-weight:500; margin-bottom:6px;">
+                    Points Left: <span id="points-left">0</span>
+                    <span id="points-over" style="display:none; color:#e83a3a; font-weight:600; margin-left:16px;"></span>
+                </div>
+                <div style="background:#eaf2ff; border-radius:8px; height:18px; width:100%; box-shadow:0 1px 4px rgba(79,140,255,0.08);">
+                    <div id="points-bar" style="height:18px; border-radius:8px; background:linear-gradient(90deg,#4f8cff 0%,#357ae8 100%); width:0%; transition:width 0.3s;"></div>
+                </div>
+            </div>
+            <div class="week">
+                <div class="day">
+                    <label>Monday</label>
+                    <input type="date" id="monday-date" name="monday-date" style="margin-bottom:6px;">
+                    <input type="text" id="monday-breakfast" name="monday-breakfast" placeholder="Breakfast">
+                    <input type="text" id="monday-lunch" name="monday-lunch" placeholder="Lunch">
+                    <input type="text" id="monday-dinner" name="monday-dinner" placeholder="Dinner">
+                    <input type="number" id="monday-points" name="monday-points" placeholder="WW Points" min="0" style="margin-top:6px;">
+                </div>
+                <div class="day">
+                    <label>Tuesday</label>
+                    <input type="date" id="tuesday-date" name="tuesday-date" style="margin-bottom:6px;">
+                    <input type="text" id="tuesday-breakfast" name="tuesday-breakfast" placeholder="Breakfast">
+                    <input type="text" id="tuesday-lunch" name="tuesday-lunch" placeholder="Lunch">
+                    <input type="text" id="tuesday-dinner" name="tuesday-dinner" placeholder="Dinner">
+                    <input type="number" id="tuesday-points" name="tuesday-points" placeholder="WW Points" min="0" style="margin-top:6px;">
+                </div>
+                <div class="day">
+                    <label>Wednesday</label>
+                    <input type="date" id="wednesday-date" name="wednesday-date" style="margin-bottom:6px;">
+                    <input type="text" id="wednesday-breakfast" name="wednesday-breakfast" placeholder="Breakfast">
+                    <input type="text" id="wednesday-lunch" name="wednesday-lunch" placeholder="Lunch">
+                    <input type="text" id="wednesday-dinner" name="wednesday-dinner" placeholder="Dinner">
+                    <input type="number" id="wednesday-points" name="wednesday-points" placeholder="WW Points" min="0" style="margin-top:6px;">
+                </div>
+                <div class="day">
+                    <label>Thursday</label>
+                    <input type="date" id="thursday-date" name="thursday-date" style="margin-bottom:6px;">
+                    <input type="text" id="thursday-breakfast" name="thursday-breakfast" placeholder="Breakfast">
+                    <input type="text" id="thursday-lunch" name="thursday-lunch" placeholder="Lunch">
+                    <input type="text" id="thursday-dinner" name="thursday-dinner" placeholder="Dinner">
+                    <input type="number" id="thursday-points" name="thursday-points" placeholder="WW Points" min="0" style="margin-top:6px;">
+                </div>
+                <div class="day">
+                    <label>Friday</label>
+                    <input type="date" id="friday-date" name="friday-date" style="margin-bottom:6px;">
+                    <input type="text" id="friday-breakfast" name="friday-breakfast" placeholder="Breakfast">
+                    <input type="text" id="friday-lunch" name="friday-lunch" placeholder="Lunch">
+                    <input type="text" id="friday-dinner" name="friday-dinner" placeholder="Dinner">
+                    <input type="number" id="friday-points" name="friday-points" placeholder="WW Points" min="0" style="margin-top:6px;">
+                </div>
+                <div class="day">
+                    <label>Saturday</label>
+                    <input type="date" id="saturday-date" name="saturday-date" style="margin-bottom:6px;">
+                    <input type="text" id="saturday-breakfast" name="saturday-breakfast" placeholder="Breakfast">
+                    <input type="text" id="saturday-lunch" name="saturday-lunch" placeholder="Lunch">
+                    <input type="text" id="saturday-dinner" name="saturday-dinner" placeholder="Dinner">
+                    <input type="number" id="saturday-points" name="saturday-points" placeholder="WW Points" min="0" style="margin-top:6px;">
+                </div>
+                <div class="day">
+                    <label>Sunday</label>
+                    <input type="date" id="sunday-date" name="sunday-date" style="margin-bottom:6px;">
+                    <input type="text" id="sunday-breakfast" name="sunday-breakfast" placeholder="Breakfast">
+                    <input type="text" id="sunday-lunch" name="sunday-lunch" placeholder="Lunch">
+                    <input type="text" id="sunday-dinner" name="sunday-dinner" placeholder="Dinner">
+                    <input type="number" id="sunday-points" name="sunday-points" placeholder="WW Points" min="0" style="margin-top:6px;">
+                </div>
+            </div>
+        </form>
+    <button type="button" id="toggle-output" style="margin-bottom:18px; background:#357ae8; color:#fff; border:none; border-radius:6px; padding:8px 18px; font-size:1em; cursor:pointer;">Show Weekly Data</button>
+    <div id="meal-output" style="display:none;"></div>
+    <div id="grocery-list-section" style="margin-top:32px;">
+        <button type="button" id="print-grocery" style="background:#4f8cff; color:#fff; border:none; border-radius:6px; padding:6px 16px; font-size:1em; cursor:pointer; float:right; margin-bottom:8px;">Print Grocery List</button>
+        <h2 style="color:#357ae8;">Grocery List</h2>
+        <form id="grocery-form" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+            <input type="text" id="grocery-input" placeholder="Add item" style="flex:1; padding:8px; border-radius:6px; border:1px solid #4f8cff;">
+            <button type="submit" style="background:#357ae8; color:#fff; border:none; border-radius:6px; padding:8px 18px; font-size:1em; cursor:pointer;">Add</button>
+        </form>
+        <ul id="grocery-list" style="list-style:none; padding-left:0;">
+        </ul>
+    </div>
+    </div>
+    <script>
+        // --- Email/Password Auth Logic ---
+        const authSection = document.getElementById('auth-section');
+        const authForm = document.getElementById('auth-form');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const authError = document.getElementById('auth-error');
+
+        loginBtn.onclick = function() {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => { authError.textContent = ''; })
+                .catch(err => { authError.textContent = err.message; });
+        };
+        registerBtn.onclick = function() {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => { authError.textContent = ''; })
+                .catch(err => { authError.textContent = err.message; });
+        };
+        // --- Firebase Initialization ---
+        // TODO: Replace with your Firebase config object from the Firebase Console
+const firebaseConfig = {
+  apiKey: "AIzaSyC7gOO9ej42D2gKPTXTCc5tsPyDAVe1gcU",
+  authDomain: "meal-af8f5.firebaseapp.com",
+  projectId: "meal-af8f5",
+  storageBucket: "meal-af8f5.firebasestorage.app",
+  messagingSenderId: "182047175465",
+  appId: "1:182047175465:web:4cd60a571e83ddf7243d38",
+  measurementId: "G-GFB1E34B74" 
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        // Print grocery list to PDF
+        document.getElementById('print-grocery').addEventListener('click', function() {
+            renderGroceryList(true);
+            const groceryList = document.getElementById('grocery-list');
+            const originalBody = document.body.innerHTML;
+            const printContent = `<h2 style='color:#357ae8;'>Grocery List</h2>${groceryList.outerHTML}`;
+            document.body.innerHTML = `<div style='max-width:500px;margin:40px auto;'>${printContent}</div>`;
+            window.print();
+            document.body.innerHTML = originalBody;
+            renderGroceryList();
+            location.reload();
+        });
+        // Grocery list logic
+        let groceryItems = [];
+        // Firestore grocery list logic
+        function saveGroceryList(userId) {
+            db.collection('users').doc(userId).set({
+                groceryList: groceryItems
+            }, { merge: true });
+        }
+        function loadGroceryList(userId) {
+            db.collection('users').doc(userId).get().then(doc => {
+                if (doc.exists && doc.data().groceryList) {
+                    groceryItems = doc.data().groceryList;
+                } else {
+                    groceryItems = [];
+                }
+                renderGroceryList();
+            });
+        }
+        function renderGroceryList(printOnly) {
+            const list = document.getElementById('grocery-list');
+            list.innerHTML = '';
+            groceryItems.forEach((item, idx) => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                li.style.padding = '6px 0';
+                li.style.display = 'flex';
+                li.style.justifyContent = 'space-between';
+                if (!printOnly) {
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = '✕';
+                    removeBtn.title = 'Remove';
+                    removeBtn.style.background = '#e83a3a';
+                    removeBtn.style.color = '#fff';
+                    removeBtn.style.border = 'none';
+                    removeBtn.style.borderRadius = '50%';
+                    removeBtn.style.padding = '0 6px';
+                    removeBtn.style.marginLeft = '8px';
+                    removeBtn.style.fontSize = '0.9em';
+                    removeBtn.style.height = '20px';
+                    removeBtn.style.width = '20px';
+                    removeBtn.style.lineHeight = '18px';
+                    removeBtn.style.cursor = 'pointer';
+                    removeBtn.onclick = function() {
+                        groceryItems.splice(idx, 1);
+                        saveGroceryList();
+                        renderGroceryList();
+                    };
+                    li.appendChild(removeBtn);
+                }
+                list.appendChild(li);
+            });
+        }
+        // Wait for Firebase Auth before loading/saving
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                authSection.style.display = 'none';
+                loadGroceryList(user.uid);
+                document.getElementById('grocery-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const input = document.getElementById('grocery-input');
+                    const value = input.value.trim();
+                    if (value) {
+                        groceryItems.push(value);
+                        saveGroceryList(user.uid);
+                        renderGroceryList();
+                        input.value = '';
+                    }
+                });
+            } else {
+                authSection.style.display = 'block';
+            }
+        });
+        // Hide/show weekly output logic
+        const mealOutput = document.getElementById('meal-output');
+        const toggleOutputBtn = document.getElementById('toggle-output');
+        toggleOutputBtn.addEventListener('click', function() {
+            if (mealOutput.style.display === 'none') {
+                mealOutput.style.display = 'block';
+                toggleOutputBtn.textContent = 'Hide Weekly Data';
+            } else {
+                mealOutput.style.display = 'none';
+                toggleOutputBtn.textContent = 'Show Weekly Data';
+            }
+        });
+        // Hide/show planner logic
+        const plannerForm = document.getElementById('meal-form');
+        const togglePlannerBtn = document.getElementById('toggle-planner');
+        togglePlannerBtn.addEventListener('click', function() {
+            if (plannerForm.style.display === 'none') {
+                plannerForm.style.display = '';
+                togglePlannerBtn.textContent = 'Hide Planner';
+            } else {
+                plannerForm.style.display = 'none';
+                togglePlannerBtn.textContent = 'Show Planner';
+            }
+        });
+        function updatePointsTracker() {
+            const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+            let totalPoints = 0;
+            days.forEach(day => {
+                totalPoints += Number(document.getElementById(`${day}-points`).value) || 0;
+            });
+            const weeklyTarget = Number(document.getElementById('weekly-target').value) || 0;
+            const pointsLeft = Math.max(weeklyTarget - totalPoints, 0);
+            document.getElementById('points-left').textContent = pointsLeft;
+            let percent = weeklyTarget > 0 ? (totalPoints / weeklyTarget) * 100 : 0;
+            percent = Math.min(percent, 100);
+            const bar = document.getElementById('points-bar');
+            const pointsOver = document.getElementById('points-over');
+            if (totalPoints > weeklyTarget && weeklyTarget > 0) {
+                bar.style.background = 'linear-gradient(90deg,#ff4f4f 0%,#e83a3a 100%)';
+                pointsOver.style.display = 'inline';
+                pointsOver.textContent = `Over by ${totalPoints - weeklyTarget} points!`;
+            } else {
+                bar.style.background = 'linear-gradient(90deg,#4f8cff 0%,#357ae8 100%)';
+                pointsOver.style.display = 'none';
+                pointsOver.textContent = '';
+            }
+        }
+
+        document.getElementById('meal-form').addEventListener('input', updatePointsTracker);
+        document.getElementById('weekly-target').addEventListener('input', updatePointsTracker);
+        ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].forEach(day => {
+            document.getElementById(`${day}-points`).addEventListener('input', updatePointsTracker);
+        });
+        updatePointsTracker();
+
+        // Week navigation logic
+        let weekOffset = 0;
+        function getMonday(d) {
+            d = new Date(d);
+            var day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(d.setDate(diff));
+        }
+        // Store meal/points data for each week in memory
+        let weekData = {};
+        // Firestore weekData logic
+        function saveWeekData(userId) {
+            db.collection('users').doc(userId).set({
+                weekData: weekData
+            }, { merge: true });
+        }
+        function loadWeekData(userId, callback) {
+            db.collection('users').doc(userId).get().then(doc => {
+                if (doc.exists && doc.data().weekData) {
+                    weekData = doc.data().weekData;
+                } else {
+                    weekData = {};
+                }
+                if (callback) callback();
+            });
+        }
+        function getWeekKey(offset) {
+            const today = new Date();
+            const monday = getMonday(today);
+            monday.setDate(monday.getDate() + offset * 7);
+            return monday.toISOString().split('T')[0];
+        }
+        function setWeekDates(offset, userId) {
+            // Save current week data before switching
+            if (typeof setWeekDates.lastOffset !== 'undefined') {
+                saveWeekData(userId);
+                const lastKey = getWeekKey(setWeekDates.lastOffset);
+                weekData[lastKey] = {};
+                ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].forEach(day => {
+                    weekData[lastKey][day] = {
+                        breakfast: document.getElementById(`${day}-breakfast`).value,
+                        lunch: document.getElementById(`${day}-lunch`).value,
+                        dinner: document.getElementById(`${day}-dinner`).value,
+                        points: document.getElementById(`${day}-points`).value,
+                        date: document.getElementById(`${day}-date`).value
+                    };
+                });
+            }
+
+            const today = new Date();
+            const monday = getMonday(today);
+            monday.setDate(monday.getDate() + offset * 7);
+            const daysOfWeek = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+            const key = getWeekKey(offset);
+            daysOfWeek.forEach((day, i) => {
+                const dateInput = document.getElementById(`${day}-date`);
+                const breakfastInput = document.getElementById(`${day}-breakfast`);
+                const lunchInput = document.getElementById(`${day}-lunch`);
+                const dinnerInput = document.getElementById(`${day}-dinner`);
+                const pointsInput = document.getElementById(`${day}-points`);
+                const date = new Date(monday);
+                date.setDate(monday.getDate() + i);
+                dateInput.value = date.toISOString().split('T')[0];
+                // Restore data if exists, else blank
+                if (weekData[key] && weekData[key][day]) {
+                    breakfastInput.value = weekData[key][day].breakfast || '';
+                    lunchInput.value = weekData[key][day].lunch || '';
+                    dinnerInput.value = weekData[key][day].dinner || '';
+                    pointsInput.value = weekData[key][day].points || '';
+                } else {
+                    breakfastInput.value = '';
+                    lunchInput.value = '';
+                    dinnerInput.value = '';
+                    pointsInput.value = '';
+                }
+            });
+            setWeekDates.lastOffset = offset;
+        }
+
+        function renderWeeklyPlan() {
+            const key = getWeekKey(weekOffset);
+            weekData[key] = weekData[key] || {};
+            const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+            let output = '<ul>';
+            let totalPoints = 0;
+            days.forEach(day => {
+                const entry = weekData[key][day] || {};
+                const breakfast = entry.breakfast || '';
+                const lunch = entry.lunch || '';
+                const dinner = entry.dinner || '';
+                const points = Number(entry.points) || 0;
+                const date = entry.date || '';
+                totalPoints += points;
+                output += `<li><strong>${day.charAt(0).toUpperCase() + day.slice(1)}${date ? ' (' + date + ')' : ''}:</strong><br>
+                    Breakfast: ${breakfast}<br>
+                    Lunch: ${lunch}<br>
+                    Dinner: ${dinner}<br>
+                    WW Points: ${points}<br>
+                    <span style='color:#357ae8;font-weight:600;'>Daily Total: ${points}</span>
+                </li>`;
+            });
+            const weeklyTarget = Number(document.getElementById('weekly-target').value) || 0;
+            output += `</ul><div style='margin-top:18px; font-size:1.1em; color:#357ae8;'><strong>Weekly Target:</strong> ${weeklyTarget} <br><strong>Total Entered:</strong> ${totalPoints}</div>`;
+            document.getElementById('meal-output').innerHTML = output;
+        }
+
+        // Wait for Firebase Auth before loading/saving weekData
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                authSection.style.display = 'none';
+                loadWeekData(user.uid, function() {
+                    setWeekDates(weekOffset, user.uid);
+                    renderWeeklyPlan();
+                });
+                document.getElementById('meal-form').addEventListener('input', function() {
+                    const key = getWeekKey(weekOffset);
+                    weekData[key] = {};
+                    ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].forEach(day => {
+                        weekData[key][day] = {
+                            breakfast: document.getElementById(`${day}-breakfast`).value,
+                            lunch: document.getElementById(`${day}-lunch`).value,
+                            dinner: document.getElementById(`${day}-dinner`).value,
+                            points: document.getElementById(`${day}-points`).value,
+                            date: document.getElementById(`${day}-date`).value
+                        };
+                    });
+                    saveWeekData(user.uid);
+                    updatePointsTracker();
+                    renderWeeklyPlan();
+                });
+                document.getElementById('weekly-target').addEventListener('input', function() {
+                    const key = getWeekKey(weekOffset);
+                    weekData[key] = weekData[key] || {};
+                    saveWeekData(user.uid);
+                    renderWeeklyPlan();
+                });
+                function handleWeekChange(offsetChange) {
+                    weekOffset += offsetChange;
+                    setWeekDates(weekOffset, user.uid);
+                    renderWeeklyPlan();
+                }
+                document.getElementById('prev-week').addEventListener('click', function() {
+                    handleWeekChange(-1);
+                });
+                document.getElementById('next-week').addEventListener('click', function() {
+                    handleWeekChange(1);
+                });
+            } else {
+                authSection.style.display = 'block';
+            }
+        });
+
+        document.getElementById('show-plan-btn').addEventListener('click', function() {
+            const mealOutput = document.getElementById('meal-output');
+            if (mealOutput.innerHTML.trim() !== '') {
+                mealOutput.style.display = mealOutput.style.display === 'none' ? 'block' : 'none';
+                this.textContent = mealOutput.style.display === 'none' ? 'Show Weekly Plan' : 'Hide Weekly Plan';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #4f8cff 0%, #357ae8 100%);
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #f4f8ff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(79,140,255,0.12);
+    padding: 32px 24px;
+    border: 2px solid #4f8cff;
+}
+
+.weekly-target-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+    .weekly-target-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .weekly-target-row label,
+    .weekly-target-row input,
+    .weekly-target-row button {
+        width: 100%;
+        margin-left: 0 !important;
+        text-align: left;
+    }
+}
+h1 {
+    text-align: center;
+    color: #357ae8;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+}
+.week {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 16px 4px;
+    }
+    .week {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .day input[type="text"] {
+        font-size: 0.95em;
+        margin-bottom: 6px;
+    }
+    button {
+        font-size: 1em;
+        padding: 10px;
+    }
+    #meal-output {
+        padding: 10px;
+        font-size: 0.98em;
+    }
+}
+.day {
+    display: flex;
+    flex-direction: column;
+}
+label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #357ae8;
+}
+input[type="text"], input[type="number"] {
+    padding: 8px;
+    border: 1px solid #4f8cff;
+    border-radius: 6px;
+    font-size: 1em;
+    background: #eaf2ff;
+    margin-bottom: 4px;
+    color: #357ae8;
+}
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #4f8cff 0%, #357ae8 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+}
+button:hover {
+    background: linear-gradient(90deg, #357ae8 0%, #4f8cff 100%);
+}
+#meal-output {
+    margin-top: 32px;
+    background: #eaf2ff;
+    border-radius: 8px;
+    padding: 16px;
+    color: #357ae8;
+    border: 1px solid #4f8cff;
+    box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+}
