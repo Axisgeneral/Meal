@@ -5,12 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Code</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+    @media (max-width: 600px) {
+        .container {
+            padding: 0 4px;
+        }
+        .weekly-target-row, .week {
+            flex-direction: column !important;
+            gap: 10px !important;
+        }
+        .day {
+            width: 100% !important;
+            min-width: 0 !important;
+            margin-bottom: 18px !important;
+        }
+        .day label {
+            font-size: 1.1em !important;
+        }
+        .day input[type="date"] {
+            width: 100% !important;
+            font-size: 1em !important;
+            margin-bottom: 8px !important;
+            background: #fff !important;
+            color: #222 !important;
+        }
+        .day input {
+            width: 100% !important;
+            font-size: 1em !important;
+            margin-bottom: 6px !important;
+        }
+        #grocery-form {
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        #grocery-input, #grocery-form button {
+            width: 100% !important;
+            font-size: 1em !important;
+        }
+        #print-grocery {
+            float: none !important;
+            width: 100% !important;
+            margin-bottom: 12px !important;
+        }
+    }
+    </style>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
+    <button id="logout-btn" style="display:none;position:fixed;top:12px;right:12px;z-index:1000;background:#e83a3a;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:1em;cursor:pointer;">Logout</button>
     <div class="container">
     <div id="auth-section" style="max-width:400px;margin:24px auto 0 auto;padding:18px 24px;background:#eaf2ff;border-radius:8px;box-shadow:0 1px 4px rgba(79,140,255,0.08);">
         <h2 style="color:#357ae8;">Sign In</h2>
@@ -113,6 +158,11 @@
     </div>
     </div>
     <script>
+        // --- Logout Logic ---
+        const logoutBtn = document.getElementById('logout-btn');
+        logoutBtn.onclick = function() {
+            auth.signOut();
+        };
         // --- Email/Password Auth Logic ---
         const authSection = document.getElementById('auth-section');
         const authForm = document.getElementById('auth-form');
@@ -216,6 +266,7 @@ const firebaseConfig = {
         auth.onAuthStateChanged(function(user) {
             if (user) {
                 authSection.style.display = 'none';
+                logoutBtn.style.display = 'block';
                 loadGroceryList(user.uid);
                 document.getElementById('grocery-form').addEventListener('submit', function(e) {
                     e.preventDefault();
@@ -230,6 +281,7 @@ const firebaseConfig = {
                 });
             } else {
                 authSection.style.display = 'block';
+                logoutBtn.style.display = 'none';
             }
         });
         // Hide/show weekly output logic
