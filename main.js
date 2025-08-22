@@ -155,12 +155,14 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+// --- Google Login ---
 const loginBtn = document.getElementById('loginBtn');
 firebase.auth().onAuthStateChanged(user => {
     if (user) {
         loginBtn.textContent = `Logged in as ${user.email}`;
         loginBtn.disabled = true;
-        // Optionally load user data here
+        // Load user data for the current week
+        loadMealData(user.uid, getCurrentWeekKey());
     } else {
         loginBtn.textContent = 'Login with Google';
         loginBtn.disabled = false;
@@ -187,13 +189,96 @@ async function saveMealData(data) {
     await firebase.database().ref(`users/${user.uid}/weeks/${weekKey}`).set(data);
 }
 
-// --- Load Data from Firebase ---
+// --- UI Update Logic for Firebase Data ---
 async function loadMealData(userId, weekKey) {
     const snapshot = await firebase.database().ref(`users/${userId}/weeks/${weekKey}`).once('value');
     const data = snapshot.val();
     if (data) {
-        // Populate your UI with loaded data
-        // e.g., update meal grid, points, grocery list, etc.
+        // Update meal grid
+        if (data.meals) {
+            document.querySelectorAll('.meal-cell').forEach((cell, idx) => {
+                cell.textContent = data.meals[idx] || '';
+            });
+        }
+        // Update points grid
+        if (data.points) {
+            document.querySelectorAll('.points-cell').forEach((cell, idx) => {
+                cell.textContent = data.points[idx] || '';
+            });
+            updatePoints();
+        }
+        // Update grocery list
+        if (data.groceryList) {
+            groceryList.innerHTML = '';
+            data.groceryList.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'Remove';
+                removeBtn.style.marginLeft = '10px';
+                removeBtn.style.background = '#e74c3c';
+                removeBtn.style.color = '#fff';
+                removeBtn.style.border = 'none';
+                removeBtn.style.borderRadius = '4px';
+                removeBtn.style.cursor = 'pointer';
+                removeBtn.onclick = () => li.remove();
+                li.appendChild(removeBtn);
+                groceryList.appendChild(li);
+            });
+        }
+    } else {
+        // Clear UI if no data
+        document.querySelectorAll('.meal-cell').forEach(cell => cell.textContent = '');
+        document.querySelectorAll('.points-cell').forEach(cell => cell.textContent = '');
+        groceryList.innerHTML = '';
+        updatePoints();
     }
 }
+
+// Example call to saveMealData
+saveMealData({
+    meals: /* array or object of meals */,
+    points: /* array of points */,
+    groceryList: /* array of grocery items */
+});
+
+// --- Autosave Feature ---
+function collectMealData() {
+    // Collect meals
+    const meals = Array.from(document.querySelectorAll('.meal-cell')).map(cell => cell.textContent);
+    // Collect points
+    const points = Array.from(document.querySelectorAll('.points-cell')).map(cell => cell.textContent);
+    // Collect grocery list
+    const groceryItems = Array.from(document.querySelectorAll('#groceryList li')).map(li => li.firstChild.textContent.trim());
+    return {
+        meals,
+        points,
+        groceryList: groceryItems
+    };
+}
+
+// Autosave on meal/points/grocery changes
+document.querySelectorAll('.meal-cell, .points-cell').forEach(cell => {
+    cell.addEventListener('input', () => {
+        saveMealData(collectMealData());
+    });
+});
+groceryBtn.addEventListener('click', () => {
+    saveMealData(collectMealData());
+});
+groceryInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') saveMealData(collectMealData());
+});
+
+// Autosave weekly target changes
+document.getElementById('weeklyTarget').addEventListener('input', () => {
+    saveMealData(collectMealData());
+});
+
+// Autosave when removing grocery items
+groceryList.addEventListener('click', function(e) {
+    if (e.target.tagName === 'BUTTON' && e.target.textContent === 'Remove') {
+        setTimeout(() => saveMealData(collectMealData()), 100);
+    }
+});
 
