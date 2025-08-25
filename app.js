@@ -1,3 +1,11 @@
+window.logoutUser = function() {
+  firebase.auth().signOut().then(() => {
+    showAuthStatus('Logged out.');
+    document.getElementById('logoff-btn').style.display = 'none';
+    document.getElementById('auth-section').style.display = 'block';
+  });
+};
+
 // Firebase Auth Logic
 // Firestore sync logic
 let db = null;
@@ -5,8 +13,12 @@ firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     db = firebase.firestore();
     loadUserData(user.uid);
+    document.getElementById('auth-section').style.display = 'none';
+    document.getElementById('logoff-btn').style.display = 'inline-block';
   } else {
     db = null;
+    document.getElementById('auth-section').style.display = 'block';
+    document.getElementById('logoff-btn').style.display = 'none';
   }
 });
 
@@ -79,13 +91,6 @@ window.loginGoogle = function() {
     .catch(err => showAuthStatus(err.message));
 };
 
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    document.getElementById('auth-section').style.display = 'none';
-  } else {
-    document.getElementById('auth-section').style.display = 'block';
-  }
-});
 // Export grocery list to PDF using jsPDF
 window.exportGroceryListPDF = function() {
   if (typeof window.jspdf === 'undefined' && typeof window.jsPDF === 'undefined') {
@@ -197,7 +202,7 @@ function getWeekMeals() {
         { name: '', items: ['', '', ''], points: '' },
         { name: '', items: ['', '', ''], points: '' }
       ]),
-      hiddenDays: Array(7).fill(true)
+  hiddenDays: Array(7).fill(false)
     };
   }
   return weekDataMap[key];
