@@ -9,13 +9,29 @@ window.logoutUser = function() {
 // Firebase Auth Logic
 // Firestore sync logic
 let db = null;
+let unsubscribeUserData = null;
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     db = firebase.firestore();
-    loadUserData(user.uid);
+    if (unsubscribeUserData) unsubscribeUserData();
+    unsubscribeUserData = db.collection('users').doc(user.uid)
+      .onSnapshot(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data.weekDataMap) {
+            weekDataMap = data.weekDataMap;
+            renderMeals();
+          }
+          if (data.groceryList) {
+            groceryList = data.groceryList;
+            renderGroceryList();
+          }
+        }
+      });
     document.getElementById('auth-section').style.display = 'none';
     document.getElementById('logoff-btn').style.display = 'inline-block';
   } else {
+    if (unsubscribeUserData) unsubscribeUserData();
     db = null;
     document.getElementById('auth-section').style.display = 'block';
     document.getElementById('logoff-btn').style.display = 'none';
@@ -31,24 +47,10 @@ function saveUserData(uid) {
   getUserDoc(uid).set({
     weekDataMap,
     groceryList
-  });
+  }, { merge: true });
 }
 
-function loadUserData(uid) {
-  getUserDoc(uid).get().then(doc => {
-    if (doc.exists) {
-      const data = doc.data();
-      if (data.weekDataMap) {
-        weekDataMap = data.weekDataMap;
-        renderMeals();
-      }
-      if (data.groceryList) {
-        groceryList = data.groceryList;
-        renderGroceryList();
-      }
-    }
-  });
-}
+// loadUserData is now handled by onSnapshot for real-time sync
 
 function trySaveData() {
   const user = firebase.auth().currentUser;
