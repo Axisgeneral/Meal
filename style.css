@@ -1,0 +1,77 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #e3f0ff 0%, #b3d1ff 100%);
+  color: #1a237e;
+}
+main {
+  padding: 1rem;
+}
+h1 {
+  text-align: center;
+  color: #1565c0;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.meal-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(21,101,192,0.10);
+  padding: 1.2rem 1rem;
+  text-align: center;
+  transition: box-shadow 0.2s, border 0.2s;
+  border: 2px solid #e3f0ff;
+}
+.meal-card:hover {
+  box-shadow: 0 8px 32px rgba(21,101,192,0.18);
+  border: 2px solid #1565c0;
+}
+h2 {
+  color: #1976d2;
+  margin-bottom: 0.5rem;
+}
+h3 {
+  color: #0d47a1;
+  margin-bottom: 0.5rem;
+}
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem 0;
+}
+li[contenteditable="true"] {
+  background: #e3f0ff;
+  border-radius: 6px;
+  margin: 0.2rem 0;
+  padding: 0.3rem 0.6rem;
+  outline: none;
+  transition: background 0.2s;
+}
+li[contenteditable="true"]:focus {
+  background: #bbdefb;
+}
+button {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #1565c0;
+}
+@media (max-width: 600px) {
+  .grid-view {
+    grid-template-columns: 1fr;
+  }
+}
