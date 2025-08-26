@@ -43,6 +43,16 @@
   <ul id="grocery-items" style="list-style: none; padding: 0; margin: 0;"></ul>
   <button onclick="exportGroceryListPDF()" style="background: #1976d2; color: #fff; border: none; border-radius: 6px; padding: 0.5rem 1.2rem; font-size: 1rem; cursor: pointer; margin-top: 1rem; width: 100%;">Export to PDF</button>
     </section>
+    <div id="auth-section" style="margin-bottom:1rem;">
+  <h2>Login</h2>
+  <input type="email" id="email" placeholder="Email" style="margin-bottom:0.5rem;" />
+  <input type="password" id="password" placeholder="Password" style="margin-bottom:0.5rem;" />
+  <button onclick="loginEmail()">Login</button>
+  <button onclick="signupEmail()">Sign Up</button>
+  <button onclick="loginGoogle()">Login with Google</button>
+  <div id="auth-status" style="margin-top:0.5rem;color:#d32f2f;"></div>
+</div>
+<button id="logoff-btn" onclick="logoutUser()" style="display:none;margin-bottom:1rem;">Log Off</button>
   </main>
   <script src="app.js"></script>
 </body>
