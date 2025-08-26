@@ -6,35 +6,9 @@
   <title>Meal Planner - test</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script>
-    // Your Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyC7gOO9ej42D2gKPTXTCc5tsPyDAVe1gcU",
-      authDomain: "meal-af8f5.firebaseapp.com",
-      projectId: "meal-af8f5",
-  storageBucket: "meal-af8f5.firebasestorage.appm",
-  messagingSenderId: "182047175465",
-  appId: "1:182047175465:web:4cd60a571e83ddf7243d38"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
 </head>
 <body>
   <main>
-    <div id="auth-section" style="max-width: 400px; margin: 2rem auto 1rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(21,101,192,0.08); padding: 1.2rem; text-align: center;">
-      <h2 style="color: #1976d2; margin-bottom: 1rem;">Login</h2>
-      <input id="email" type="email" placeholder="Email" style="width: 80%; margin-bottom: 0.5rem; padding: 0.5rem; border-radius: 6px; border: 1px solid #b3d1ff;"><br>
-      <input id="password" type="password" placeholder="Password" style="width: 80%; margin-bottom: 0.5rem; padding: 0.5rem; border-radius: 6px; border: 1px solid #b3d1ff;"><br>
-      <button onclick="loginEmail()" style="background: #1976d2; color: #fff; border: none; border-radius: 6px; padding: 0.5rem 1.2rem; font-size: 1rem; cursor: pointer; margin-bottom: 0.5rem;">Login with Email</button>
-      <button onclick="signupEmail()" style="background: #388e3c; color: #fff; border: none; border-radius: 6px; padding: 0.5rem 1.2rem; font-size: 1rem; cursor: pointer; margin-bottom: 0.5rem;">Sign Up</button>
-      <button onclick="loginGoogle()" style="background: #db4437; color: #fff; border: none; border-radius: 6px; padding: 0.5rem 1.2rem; font-size: 1rem; cursor: pointer;">Login with Google</button>
-      <div id="auth-status" style="margin-top: 1rem; color: #1976d2;"></div>
-  </div>
-  <button id="logoff-btn" onclick="logoutUser()" style="display:none;background:#d32f2f;color:#fff;border:none;border-radius:6px;padding:0.5rem 1.2rem;font-size:1rem;cursor:pointer;margin:2rem auto 0 auto;display:block;max-width:400px;width:100%;">Log Off</button>
     <h1>Test</h1>
     <div id="week-controls" style="max-width: 400px; margin: 1.5rem auto 0 auto; text-align: center; display: flex; justify-content: center; align-items: center; gap: 1rem;">
       <button onclick="prevWeek()" style="background: #1976d2; color: #fff; border: none; border-radius: 6px; padding: 0.4rem 1rem; font-size: 1rem; cursor: pointer;">&#8592; Previous Week</button>
@@ -61,12 +35,7 @@
       <!-- Meals will be rendered here -->
     </section>
     <section id="grocery-list" style="max-width: 500px; margin: 2rem auto 1.5rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(21,101,192,0.08); padding: 1.2rem;">
-      <h2 style="color: #1976d2; text-align: center; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-        <span style="display: inline-flex; align-items: center;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#1976d2" viewBox="0 0 24 24" style="margin-right: 0.3rem;"><path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm1.447-2.105l1.553-7.895h-15v2h13.447l-1.447 7.105h-10.553v2h12c.553 0 1-.447 1-1 0-.553-.447-1-1-1h-11.447l.553-2.105h10.894zm-13.447-9.895v2h2v-2h-2zm16-2h-2v2h2v-2zm-2 0h-12v2h12v-2z"/></svg>
-          Grocery List
-        </span>
-      </h2>
+      <h2 style="color: #1976d2; text-align: center; margin-bottom: 1rem;">Grocery List</h2>
       <div style="display: flex; gap: 0.7rem; justify-content: center; margin-bottom: 1rem;">
         <input id="grocery-input" type="text" placeholder="Add item..." style="flex:1; padding: 0.5rem; border-radius: 6px; border: 1px solid #b3d1ff;">
         <button onclick="addGroceryItem()" style="background: #388e3c; color: #fff; border: none; border-radius: 6px; padding: 0.5rem 1.2rem; font-size: 1rem; cursor: pointer;">Add</button>

@@ -1,98 +1,3 @@
-window.logoutUser = function() {
-  firebase.auth().signOut().then(() => {
-    showAuthStatus('Logged out.');
-    document.getElementById('logoff-btn').style.display = 'none';
-    document.getElementById('auth-section').style.display = 'block';
-  });
-};
-
-// Firebase Auth Logic
-// Firestore sync logic
-let db = null;
-let unsubscribeUserData = null;
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    db = firebase.firestore();
-    if (unsubscribeUserData) unsubscribeUserData();
-    unsubscribeUserData = db.collection('users').doc(user.uid)
-      .onSnapshot(doc => {
-        if (doc.exists) {
-          const data = doc.data();
-          if (data.weekDataMap) {
-            weekDataMap = data.weekDataMap;
-            renderMeals();
-          }
-          if (data.groceryList) {
-            groceryList = data.groceryList;
-            renderGroceryList();
-          }
-        }
-      });
-    document.getElementById('auth-section').style.display = 'none';
-    document.getElementById('logoff-btn').style.display = 'inline-block';
-  } else {
-    if (unsubscribeUserData) unsubscribeUserData();
-    db = null;
-    document.getElementById('auth-section').style.display = 'block';
-    document.getElementById('logoff-btn').style.display = 'none';
-  }
-});
-
-function getUserDoc(uid) {
-  return db.collection('users').doc(uid);
-}
-
-function saveUserData(uid) {
-  if (!db) return;
-  getUserDoc(uid).set({
-    weekDataMap,
-    groceryList
-  }, { merge: true });
-}
-
-// loadUserData is now handled by onSnapshot for real-time sync
-
-function trySaveData() {
-  const user = firebase.auth().currentUser;
-  if (user) saveUserData(user.uid);
-}
-function showAuthStatus(msg) {
-  const status = document.getElementById('auth-status');
-  if (status) status.textContent = msg;
-}
-
-window.loginEmail = function() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(user => {
-      showAuthStatus('Logged in!');
-      document.getElementById('auth-section').style.display = 'none';
-    })
-    .catch(err => showAuthStatus(err.message));
-};
-
-window.signupEmail = function() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(user => {
-      showAuthStatus('Account created!');
-      document.getElementById('auth-section').style.display = 'none';
-    })
-    .catch(err => showAuthStatus(err.message));
-};
-
-window.loginGoogle = function() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider)
-    .then(user => {
-      showAuthStatus('Logged in with Google!');
-      document.getElementById('auth-section').style.display = 'none';
-    })
-    .catch(err => showAuthStatus(err.message));
-};
-
 // Export grocery list to PDF using jsPDF
 window.exportGroceryListPDF = function() {
   if (typeof window.jspdf === 'undefined' && typeof window.jsPDF === 'undefined') {
@@ -126,7 +31,6 @@ function renderGroceryList() {
     li.innerHTML = `<span>${item}</span><button onclick="removeGroceryItem(${idx})" style="background:#d32f2f;color:#fff;border:none;border-radius:6px;padding:0.2rem 0.7rem;cursor:pointer;">Remove</button>`;
     ul.appendChild(li);
   });
-  trySaveData();
 }
 
 window.addGroceryItem = function() {
@@ -135,14 +39,12 @@ window.addGroceryItem = function() {
     groceryList.push(input.value.trim());
     input.value = '';
     renderGroceryList();
-    trySaveData();
   }
 };
 
 window.removeGroceryItem = function(idx) {
   groceryList.splice(idx, 1);
   renderGroceryList();
-  trySaveData();
 };
 window.prevWeek = function() {
   baseDate.setDate(baseDate.getDate() - 7);
@@ -164,7 +66,6 @@ window.resetWeek = function() {
     hiddenDays: Array(7).fill(false)
   };
   renderMeals();
-  trySaveData();
 };
 window.unhideAllDays = function() {
   const week = getWeekMeals();
@@ -204,7 +105,7 @@ function getWeekMeals() {
         { name: '', items: ['', '', ''], points: '' },
         { name: '', items: ['', '', ''], points: '' }
       ]),
-  hiddenDays: Array(7).fill(false)
+      hiddenDays: Array(7).fill(true)
     };
   }
   return weekDataMap[key];
@@ -258,7 +159,11 @@ function renderMeals() {
       label.textContent = `${totalPoints} / ${weeklyMax}`;
     }
   }
-  trySaveData();
+window.updateWeeklyGoal = function(value) {
+  weeklyMax = Math.max(1, parseInt(value, 10) || 175);
+  renderMeals();
+};
+
   // Meals grid
   const grid = document.getElementById('meal-grid');
   grid.innerHTML = '';
@@ -329,27 +234,83 @@ window.unhideDay = function(day) {
 window.updateMealPoints = function(day, mealIdx, value) {
   getWeekMeals().meals[day][mealIdx].points = value;
   renderMeals();
-  trySaveData();
 };
 
 window.updateMealName = function(day, mealIdx, newName) {
   getWeekMeals().meals[day][mealIdx].name = newName;
   renderMeals();
-  trySaveData();
 };
 
 window.updateMealItem = function(day, mealIdx, itemIdx, newItem) {
   getWeekMeals().meals[day][mealIdx].items[itemIdx] = newItem;
   renderMeals();
-  trySaveData();
 };
 
 window.deleteMeal = function(day, mealIdx) {
   // Only clear the items, keep the meal type visible
   getWeekMeals().meals[day][mealIdx].items = getWeekMeals().meals[day][mealIdx].items.map(() => '');
   renderMeals();
-  trySaveData();
 };
+
+function saveUserData(uid) {
+  if (!db) return;
+  // Convert nested arrays to objects for Firestore compatibility
+  const weekDataMapForFirestore = {};
+  for (const key in weekDataMap) {
+    const week = weekDataMap[key];
+    weekDataMapForFirestore[key] = {
+      meals: week.meals.reduce((acc, dayMeals, dayIdx) => {
+        const obj = {};
+        dayMeals.forEach((meal, idx) => { obj[idx] = meal; });
+        acc[dayIdx] = obj;
+        return acc;
+      }, {}),
+      hiddenDays: [...week.hiddenDays]
+    };
+  }
+  getUserDoc(uid).set({
+    weekDataMap: weekDataMapForFirestore,
+    groceryList
+  }, { merge: true });
+}
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    db = firebase.firestore();
+    if (unsubscribeUserData) unsubscribeUserData();
+    unsubscribeUserData = db.collection('users').doc(user.uid)
+      .onSnapshot(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          let shouldRender = false;
+          if (JSON.stringify(data.weekDataMap) !== JSON.stringify(weekDataMap)) {
+            // Convert Firestore object back to arrays
+            weekDataMap = {};
+            for (const key in data.weekDataMap) {
+              const week = data.weekDataMap[key];
+              weekDataMap[key] = {
+                meals: Object.values(week.meals).map(dayMeals => Object.values(dayMeals)),
+                hiddenDays: Array.isArray(week.hiddenDays) ? week.hiddenDays : []
+              };
+            }
+            shouldRender = true;
+          }
+          if (JSON.stringify(data.groceryList) !== JSON.stringify(groceryList)) {
+            groceryList = data.groceryList;
+            renderGroceryList();
+          }
+          if (shouldRender) renderMeals();
+        }
+      });
+    document.getElementById('auth-section').style.display = 'none';
+    document.getElementById('logoff-btn').style.display = 'inline-block';
+  } else {
+    if (unsubscribeUserData) unsubscribeUserData();
+    db = null;
+    document.getElementById('auth-section').style.display = 'block';
+    document.getElementById('logoff-btn').style.display = 'none';
+  }
+});
 
 document.addEventListener('DOMContentLoaded', function() {
   renderMeals();
