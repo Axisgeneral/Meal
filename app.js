@@ -316,3 +316,34 @@ document.addEventListener('DOMContentLoaded', function() {
   renderMeals();
   renderGroceryList();
 });
+window.loginEmail = function() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(user => {
+      showAuthStatus('Logged in!');
+      document.getElementById('auth-section').style.display = 'none';
+    })
+    .catch(err => showAuthStatus(err.message));
+};
+
+window.signupEmail = function() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(user => {
+      showAuthStatus('Account created!');
+      document.getElementById('auth-section').style.display = 'none';
+    })
+    .catch(err => showAuthStatus(err.message));
+};
+
+window.loginGoogle = function() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .then(user => {
+      showAuthStatus('Logged in with Google!');
+      document.getElementById('auth-section').style.display = 'none';
+    })
+    .catch(err => showAuthStatus(err.message));
+};
