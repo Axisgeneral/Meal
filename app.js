@@ -317,6 +317,18 @@ document.addEventListener('DOMContentLoaded', function() {
   renderMeals();
   renderGroceryList();
 });
+  // Logoff button functionality
+  window.logoutUser = function() {
+    firebase.auth().signOut()
+      .then(function() {
+        showAuthStatus('Logged off!');
+        document.getElementById('auth-section').style.display = 'block';
+        document.getElementById('logoff-btn').style.display = 'none';
+      })
+      .catch(function(error) {
+        showAuthStatus('Error logging off: ' + error.message);
+      });
+  };
 window.loginEmail = function() {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
