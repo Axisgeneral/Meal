@@ -17,6 +17,7 @@ window.exportGroceryListPDF = function() {
 };
 // Grocery List Logic
 let groceryList = [];
+let unsubscribeUserData = null;
 
 function renderGroceryList() {
   const ul = document.getElementById('grocery-items');
