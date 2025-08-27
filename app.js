@@ -347,10 +347,3 @@ window.loginGoogle = function() {
     })
     .catch(err => showAuthStatus(err.message));
 };
-
-let unsubscribeUserData = null;
-
-function showAuthStatus(msg) {
-  const status = document.getElementById('auth-status');
-  if (status) status.textContent = msg;
-}
